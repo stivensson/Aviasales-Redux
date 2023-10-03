@@ -2,9 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Checkbox } from 'antd'
 
-import './filtersBox.scss'
-
 import { checkAllAction, checkOneAction, checkThreeAction, checkTwoAction, checkWithoutAction } from '../../store'
+
+import classes from './FiltersBox.module.scss'
 
 const FiltersBox = () => {
   const dispatch = useDispatch()
@@ -31,21 +31,21 @@ const FiltersBox = () => {
   }
 
   return (
-    <div className="filter-box">
-      <span className="span">КОЛИЧЕСТВО ПЕРЕСАДОК</span>
-      <Checkbox className="checkbox" checked={allCheck && true} onClick={checkAll}>
+    <div className={classes['filter-box']}>
+      <span className={classes.span}>КОЛИЧЕСТВО ПЕРЕСАДОК</span>
+      <Checkbox className={classes.checkbox} checked={allCheck} onClick={checkAll}>
         Все
       </Checkbox>
-      <Checkbox className="checkbox" checked={withoutCheck && true} onClick={checkWithout}>
+      <Checkbox className={classes.checkbox} checked={withoutCheck} onClick={checkWithout}>
         Без пересадок
       </Checkbox>
-      <Checkbox className="checkbox" checked={oneCheck && true} onClick={checkOne}>
+      <Checkbox className={classes.checkbox} checked={oneCheck} onClick={checkOne}>
         1 пересадка
       </Checkbox>
-      <Checkbox className="checkbox" checked={twoCheck && true} onClick={checkTwo}>
+      <Checkbox className={classes.checkbox} checked={twoCheck} onClick={checkTwo}>
         2 пересадки
       </Checkbox>
-      <Checkbox className="checkbox" checked={threeCheck && true} onClick={checkThree}>
+      <Checkbox className={classes.checkbox} checked={threeCheck} onClick={checkThree}>
         3 пересадки
       </Checkbox>
     </div>

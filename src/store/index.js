@@ -5,8 +5,14 @@ import {
   checkOneAction,
   checkTwoAction,
   checkThreeAction,
-} from './filtersBoxReducer'
-import { addTicketsAction, sortCheapAction, sortFastAction, onErrorAction } from './ticketsListReducer'
+  addTicketsAction,
+  sortCheapAction,
+  sortFastAction,
+  onErrorAction,
+  onLineStatusAction,
+  offLineStatusAction,
+} from './actions'
+
 export {
   store,
   checkAllAction,
@@ -18,4 +24,6 @@ export {
   sortCheapAction,
   sortFastAction,
   onErrorAction,
+  onLineStatusAction,
+  offLineStatusAction,
 }

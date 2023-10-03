@@ -1,6 +1,6 @@
 import React from 'react'
 
-import './Ticket.scss'
+import classes from './Ticket.module.scss'
 
 const Ticket = ({
   price,
@@ -88,13 +88,13 @@ const Ticket = ({
   const inDateBack = inDateBackStart + ' - ' + inDateBackEnd
 
   return (
-    <ul className="ticket">
-      <li className="ticket-title">
+    <ul className={classes.ticket}>
+      <li className={classes['ticket-title']}>
         <span>{price} Р</span>
         <img src={logotip} />
       </li>
-      <li className="ticket-info">
-        <div className="ticket-info-title">
+      <li className={classes['ticket-info']}>
+        <div className={classes['ticket-info-title']}>
           <span>
             {code1} - {code2}
           </span>
@@ -102,21 +102,21 @@ const Ticket = ({
 
           <span>{quant1 ? `${quant} ПЕРЕСАДКА` : quant2 ? `${quant} ПЕРЕСАДКИ` : 'БЕЗ ПЕРЕСАДОК'}</span>
         </div>
-        <div className="ticket-info-values">
+        <div className={classes['ticket-info-values']}>
           <span>{inDate}</span>
           <span>{inWay}</span>
           <span>{transfer.join(', ')}</span>
         </div>
       </li>
-      <li className="ticket-info">
-        <div className="ticket-info-title">
+      <li className={classes['ticket-info']}>
+        <div className={classes['ticket-info-title']}>
           <span>
             {code1Back} - {code2Back}
           </span>
           <span>В ПУТИ</span>
           <span>{quant1Back ? `${quantBack} ПЕРЕСАДКА` : quant2Back ? `${quantBack} ПЕРЕСАДКИ` : 'БЕЗ ПЕРЕСАДОК'}</span>
         </div>
-        <div className="ticket-info-values">
+        <div className={classes['ticket-info-values']}>
           <span>{inDateBack}</span>
           <span>{inWayBack}</span>
           <span>{transferBack.join(', ')}</span>

@@ -4,8 +4,10 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import { ticketsListReducer } from './ticketsListReducer'
 import { filtersBoxReducer } from './filtersBoxReducer'
+import { appReducer } from './appReducer'
 
 const rootReducer = combineReducers({
+  app: appReducer,
   filtersBox: filtersBoxReducer,
   ticketsList: ticketsListReducer,
 })

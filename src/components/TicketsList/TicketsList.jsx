@@ -2,38 +2,28 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Alert, Button, Spin } from 'antd'
 import classNames from 'classnames'
-
-import './ticketsList.scss'
+import uniqid from 'uniqid'
 
 import Ticket from '../Ticket'
-import AviaAPI from '../../service/AviaAPI'
+import AviaApi from '../../service/AviaApi'
 import { addTicketsAction, sortCheapAction, sortFastAction } from '../../store'
 
+import classes from './TicketsList.module.scss'
+
 const TicketsList = () => {
-  const aviaApi = new AviaAPI()
+  const aviaApi = new AviaApi()
 
   const dispatch = useDispatch()
-  const { ticketsData, searchId, stopSearch, index, sortCheap, sortFast } = useSelector((state) => state.ticketsList)
+  const { ticketsData, index, stopSearch, sortCheap, sortFast, searchId } = useSelector((state) => state.ticketsList)
   const { allCheck, withoutCheck, oneCheck, twoCheck, threeCheck } = useSelector((state) => state.filtersBox)
 
   useEffect(() => {
-    dispatch(aviaApi.getSearchIdThunk())
-  }, [])
-
-  useEffect(() => {
-    if (!searchId) return
-
-    dispatch(aviaApi.getStopSearchThunk(searchId))
-  }, [searchId])
-
-  useEffect(() => {
-    if (!searchId || stopSearch) return
-
-    dispatch(aviaApi.getStopSearchThunk(searchId))
+    if (stopSearch) return
     dispatch(aviaApi.getTicketsThunk(searchId))
   })
 
   let partTicketsData = []
+
   const arrFilter = [withoutCheck, oneCheck, twoCheck, threeCheck]
 
   const filtering = (num) => {
@@ -60,7 +50,7 @@ const TicketsList = () => {
     })
   }
 
-  if (allCheck) partTicketsData = ticketsData.slice(index, index + 5)
+  if (allCheck) partTicketsData = ticketsData.slice(0, index + 5)
 
   const conditions = () => {
     let count = null
@@ -74,19 +64,17 @@ const TicketsList = () => {
     let idxOut = arrNum.filter((item) => !idx.includes(item))
 
     if (count === 0) return
-    if (count === 1) return (partTicketsData = filtering(idx[0]).slice(index, index + 5))
-    if (count === 2) return (partTicketsData = filteringSeveral(idx[0], idx[1]).slice(index, index + 5))
-    if (count === 3) return (partTicketsData = filteringOut(idxOut[0]).slice(index, index + 5))
+    if (count === 1) return (partTicketsData = filtering(idx[0]).slice(0, index + 5))
+    if (count === 2) return (partTicketsData = filteringSeveral(idx[0], idx[1]).slice(0, index + 5))
+    if (count === 3) return (partTicketsData = filteringOut(idxOut[0]).slice(0, index + 5))
   }
 
   if (sortCheap) {
-    partTicketsData = ticketsData.sort((a, b) => a.price - b.price).slice(index, index + 5)
+    partTicketsData = ticketsData.sort((a, b) => a.price - b.price).slice(0, index + 5)
   }
 
   if (sortFast)
-    partTicketsData = ticketsData
-      .sort((a, b) => a.segments[0].duration - b.segments[0].duration)
-      .slice(index, index + 5)
+    partTicketsData = ticketsData.sort((a, b) => a.segments[0].duration - b.segments[0].duration).slice(0, index + 5)
 
   conditions()
 
@@ -103,8 +91,8 @@ const TicketsList = () => {
   }
 
   return (
-    <div className="tickets-list">
-      <div className="tickets-sort">
+    <div className={classes['tickets-list']}>
+      <div className={classes['tickets-sort']}>
         <Button.Group>
           <Button
             disabled={!withoutCheck && !oneCheck && !twoCheck && !threeCheck ? true : false}
@@ -125,20 +113,23 @@ const TicketsList = () => {
         </Button.Group>
       </div>
       <Alert
-        className={classNames({
-          hidden: withoutCheck || oneCheck || twoCheck || threeCheck,
-          'tickets-alert': !withoutCheck && !oneCheck && !twoCheck && !threeCheck,
+        className={classNames(classes['tickets-alert'], {
+          [classes.hidden]: withoutCheck || oneCheck || twoCheck || threeCheck,
         })}
         type="info"
         message="По заданным параметрам ничего не найдено!"
       />
       <Spin spinning={!stopSearch} tip="Загрузка билетов">
-        <div className={classNames({ spinner: !stopSearch, hidden: stopSearch })}></div>
+        <div className={classNames(classes.spinner, { [classes.hidden]: stopSearch })}></div>
       </Spin>
-      <div className={!withoutCheck && !oneCheck && !twoCheck && !threeCheck ? 'hidden' : 'tickets'}>
+      <div
+        className={classNames(classes.tickets, {
+          [classes.hidden]: !withoutCheck && !oneCheck && !twoCheck && !threeCheck,
+        })}
+      >
         {partTicketsData.map((item) => (
           <Ticket
-            key={item.id}
+            key={uniqid()}
             price={item.price}
             logo={item.carrier}
             code1={item.segments[0].origin}
@@ -153,11 +144,10 @@ const TicketsList = () => {
             timeBack={item.segments[1].duration}
             transferBack={item.segments[1].stops}
             quantBack={item.segments[1].stops.length}
-            stop={stopSearch}
           />
         ))}
       </div>
-      <div className="tickets-add">
+      <div className={classes['tickets-add']}>
         <Button style={{ width: 500, height: 50, backgroundColor: '#2196f3', color: 'white' }} onClick={addTickets}>
           ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
         </Button>

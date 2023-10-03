@@ -1,33 +1,49 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Alert } from 'antd'
-
-import './App.scss'
 
 import FiltersBox from '../FiltersBox'
 import TicketsList from '../TicketsList'
+import plane from '../../assets/plane.svg'
+import planet from '../../assets/planet.svg'
+import { offLineStatusAction, onLineStatusAction } from '../../store'
 
-import plane from './plane.svg'
-import planet from './planet.svg'
+import classes from './App.module.scss'
 
 const App = () => {
-  const { onError } = useSelector((state) => state.ticketsList)
+  const { onLineStatus } = useSelector((state) => state.app)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const onLineStatus = () => {
+      navigator.onLine ? dispatch(onLineStatusAction()) : dispatch(offLineStatusAction())
+    }
+
+    window.addEventListener('online', onLineStatus)
+    window.addEventListener('offline', onLineStatus)
+
+    return () => {
+      window.removeEventListener('online', onLineStatus)
+      window.removeEventListener('offline', onLineStatus)
+    }
+  }, [onLineStatus])
+
   return (
-    <div className="app">
-      {onError ? (
+    <div className={classes.app}>
+      {!onLineStatus ? (
         <Alert
-          className="error"
+          className={classes.error}
           message="Внимание, ошибка соединения!"
           description="- проверьте интернет соединение или перезагрузите страницу."
           type="error"
           closable
         />
       ) : null}
-      <div className="app-img">
-        <img className="plane" alt="plane" src={plane} />
-        <img className="planet" alt="planet" src={planet} />
+      <div className={classes['app-img']}>
+        <img className={classes.plane} alt="plane" src={plane} />
+        <img className={classes.planet} alt="planet" src={planet} />
       </div>
-      <div className="app-list">
+      <div className={classes['app-list']}>
         <FiltersBox />
         <TicketsList />
       </div>
