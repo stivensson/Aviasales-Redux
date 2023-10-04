@@ -1,12 +1,20 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Alert, Button, Spin } from 'antd'
+import { Alert, Button, FloatButton, Spin } from 'antd'
 import classNames from 'classnames'
 import uniqid from 'uniqid'
 
 import Ticket from '../Ticket'
 import AviaApi from '../../service/AviaApi'
 import { addTicketsAction, sortCheapAction, sortFastAction } from '../../store'
+import {
+  filtering,
+  filteringOut,
+  filteringSeveral,
+  showAll,
+  sortCheapest,
+  sortFastest,
+} from '../../utils/ticketsListUtil'
 
 import classes from './TicketsList.module.scss'
 
@@ -23,60 +31,23 @@ const TicketsList = () => {
   })
 
   let partTicketsData = []
-
+  let count = null
+  let idx = []
   const arrFilter = [withoutCheck, oneCheck, twoCheck, threeCheck]
 
-  const filtering = (num) => {
-    return ticketsData.filter((item) => {
-      const element0 = item.segments[0].stops.length
-      const element1 = item.segments[1].stops.length
-      return element0 === num && element1 === num
-    })
-  }
+  arrFilter.forEach((item, index) => {
+    if (item) count++, idx.push(index)
+  })
 
-  const filteringOut = (num) => {
-    return ticketsData.filter((item) => {
-      const element0 = item.segments[0].stops.length
-      const element1 = item.segments[1].stops.length
-      return element0 !== num && element1 !== num
-    })
-  }
+  const arrNum = [0, 1, 2, 3]
+  let idxOut = arrNum.filter((item) => !idx.includes(item))
 
-  const filteringSeveral = (num1, num2) => {
-    return ticketsData.filter((item) => {
-      const element0 = item.segments[0].stops.length
-      const element1 = item.segments[1].stops.length
-      return (element0 === num1 || element0 === num2) && (element1 === num1 || element1 === num2)
-    })
-  }
-
-  if (allCheck) partTicketsData = ticketsData.slice(0, index + 5)
-
-  const conditions = () => {
-    let count = null
-    let idx = []
-
-    arrFilter.forEach((item, index) => {
-      if (item) count++, idx.push(index)
-    })
-
-    const arrNum = [0, 1, 2, 3]
-    let idxOut = arrNum.filter((item) => !idx.includes(item))
-
-    if (count === 0) return
-    if (count === 1) return (partTicketsData = filtering(idx[0]).slice(0, index + 5))
-    if (count === 2) return (partTicketsData = filteringSeveral(idx[0], idx[1]).slice(0, index + 5))
-    if (count === 3) return (partTicketsData = filteringOut(idxOut[0]).slice(0, index + 5))
-  }
-
-  if (sortCheap) {
-    partTicketsData = ticketsData.sort((a, b) => a.price - b.price).slice(0, index + 5)
-  }
-
-  if (sortFast)
-    partTicketsData = ticketsData.sort((a, b) => a.segments[0].duration - b.segments[0].duration).slice(0, index + 5)
-
-  conditions()
+  if (allCheck) partTicketsData = showAll(ticketsData, index)
+  if (sortCheap) partTicketsData = sortCheapest(ticketsData, index)
+  if (sortFast) partTicketsData = sortFastest(ticketsData, index)
+  if (count === 1) partTicketsData = filtering(idx[0], ticketsData, index)
+  if (count === 2) partTicketsData = filteringSeveral(idx[0], idx[1], ticketsData, index)
+  if (count === 3) partTicketsData = filteringOut(idxOut[0], ticketsData, index)
 
   const addTickets = () => {
     dispatch(addTicketsAction())
@@ -147,6 +118,7 @@ const TicketsList = () => {
           />
         ))}
       </div>
+      <FloatButton.BackTop />
       <div className={classes['tickets-add']}>
         <Button style={{ width: 500, height: 50, backgroundColor: '#2196f3', color: 'white' }} onClick={addTickets}>
           ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
