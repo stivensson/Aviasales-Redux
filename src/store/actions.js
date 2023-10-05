@@ -12,7 +12,6 @@ import {
   GET_TICKETS,
   GET_SEARCH_ID,
   ON_ERROR,
-  ADD_TICKETS,
   SORT_CHEAP,
   SORT_FAST,
   ONLINE,
@@ -43,7 +42,6 @@ export const checkThreeAction = (e) => {
 export const getSearchIdAction = (payload) => ({ type: GET_SEARCH_ID, payload })
 export const getTicketsAction = (payload) => ({ type: GET_TICKETS, payload })
 export const onErrorAction = () => ({ type: ON_ERROR })
-export const addTicketsAction = () => ({ type: ADD_TICKETS })
 export const sortCheapAction = () => ({ type: SORT_CHEAP })
 export const sortFastAction = () => ({ type: SORT_FAST })
 

@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Alert, Button, FloatButton, Spin } from 'antd'
 import classNames from 'classnames'
-import uniqid from 'uniqid'
 
 import Ticket from '../Ticket'
 import AviaApi from '../../service/AviaApi'
-import { addTicketsAction, sortCheapAction, sortFastAction } from '../../store'
+import { sortCheapAction, sortFastAction } from '../../store'
 import {
   filtering,
   filteringOut,
@@ -22,13 +21,15 @@ const TicketsList = () => {
   const aviaApi = new AviaApi()
 
   const dispatch = useDispatch()
-  const { ticketsData, index, stopSearch, sortCheap, sortFast, searchId } = useSelector((state) => state.ticketsList)
+  const { ticketsData, stopSearch, sortCheap, sortFast, searchId } = useSelector((state) => state.ticketsList)
   const { allCheck, withoutCheck, oneCheck, twoCheck, threeCheck } = useSelector((state) => state.filtersBox)
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    if (stopSearch) return
     dispatch(aviaApi.getTicketsThunk(searchId))
-  })
+  }, [])
+
+  if (searchId && !stopSearch) dispatch(aviaApi.getTicketsThunk(searchId))
 
   let partTicketsData = []
   let count = null
@@ -48,10 +49,6 @@ const TicketsList = () => {
   if (count === 1) partTicketsData = filtering(idx[0], ticketsData, index)
   if (count === 2) partTicketsData = filteringSeveral(idx[0], idx[1], ticketsData, index)
   if (count === 3) partTicketsData = filteringOut(idxOut[0], ticketsData, index)
-
-  const addTickets = () => {
-    dispatch(addTicketsAction())
-  }
 
   const sortingCheap = () => {
     dispatch(sortCheapAction())
@@ -100,7 +97,11 @@ const TicketsList = () => {
       >
         {partTicketsData.map((item) => (
           <Ticket
-            key={uniqid()}
+            key={
+              item.price +
+              new Date(item.segments[1].date).getMilliseconds() -
+              new Date(item.segments[0].date).getMilliseconds()
+            }
             price={item.price}
             logo={item.carrier}
             code1={item.segments[0].origin}
@@ -120,7 +121,10 @@ const TicketsList = () => {
       </div>
       <FloatButton.BackTop />
       <div className={classes['tickets-add']}>
-        <Button style={{ width: 500, height: 50, backgroundColor: '#2196f3', color: 'white' }} onClick={addTickets}>
+        <Button
+          style={{ width: 500, height: 50, backgroundColor: '#2196f3', color: 'white' }}
+          onClick={() => setIndex((i) => i + 5)}
+        >
           ПОКАЗАТЬ ЕЩЕ 5 БИЛЕТОВ!
         </Button>
       </div>

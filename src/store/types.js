@@ -11,7 +11,6 @@ export const NO_CHECK_THREE = 'NO_CHECK_THREE'
 
 export const GET_SEARCH_ID = 'GET_SEARCH_ID'
 export const GET_TICKETS = 'GET_TICKETS'
-export const ADD_TICKETS = 'ADD_TICKETS'
 export const SORT_CHEAP = 'SORT_CHEAP'
 export const SORT_FAST = 'SORT_FAST'
 export const ON_ERROR = 'ON_ERROR'
