@@ -21,15 +21,18 @@ const TicketsList = () => {
   const aviaApi = new AviaApi()
 
   const dispatch = useDispatch()
-  const { ticketsData, stopSearch, sortCheap, sortFast, searchId } = useSelector((state) => state.ticketsList)
+  const { ticketsData, stopSearch, sortCheap, sortFast, searchId, status } = useSelector((state) => state.ticketsList)
   const { allCheck, withoutCheck, oneCheck, twoCheck, threeCheck } = useSelector((state) => state.filtersBox)
+  const { onLineStatus } = useSelector((state) => state.app)
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    dispatch(aviaApi.getTicketsThunk(searchId))
+    dispatch(aviaApi.getSearchIdThunk())
   }, [])
 
-  if (searchId && !stopSearch) dispatch(aviaApi.getTicketsThunk(searchId))
+  useEffect(() => {
+    dispatch(aviaApi.getTicketsThunk(searchId, stopSearch, onLineStatus))
+  }, [searchId, status])
 
   let partTicketsData = []
   let count = null

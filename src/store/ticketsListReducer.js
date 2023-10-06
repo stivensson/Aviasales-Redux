@@ -9,6 +9,7 @@ const defaultState = {
   sortCheap: false,
   sortFast: false,
   onError: false,
+  status: false,
 }
 
 export const ticketsListReducer = (state = defaultState, action) => {
@@ -29,6 +30,7 @@ export const ticketsListReducer = (state = defaultState, action) => {
       } else {
         return {
           ...state,
+          status: !state.status,
         }
       }
 

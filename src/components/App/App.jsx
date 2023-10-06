@@ -12,7 +12,6 @@ import classes from './App.module.scss'
 
 const App = () => {
   const { onLineStatus } = useSelector((state) => state.app)
-  const { onError } = useSelector((state) => state.ticketsList)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const App = () => {
 
   return (
     <div className={classes.app}>
-      {!onLineStatus || onError ? (
+      {!onLineStatus ? (
         <Alert
           className={classes.error}
           message="Внимание, ошибка соединения!"
