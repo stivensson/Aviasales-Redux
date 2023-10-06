@@ -14,6 +14,7 @@ export const GET_TICKETS = 'GET_TICKETS'
 export const SORT_CHEAP = 'SORT_CHEAP'
 export const SORT_FAST = 'SORT_FAST'
 export const ON_ERROR = 'ON_ERROR'
+export const ON_ALERT = 'ON_ALERT'
 
 export const ONLINE = 'ONLINE'
 export const OFFLINE = 'OFFLINE'

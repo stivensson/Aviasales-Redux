@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-import { GET_SEARCH_ID, GET_TICKETS, SORT_CHEAP, SORT_FAST, ON_ERROR } from './types'
+import { GET_SEARCH_ID, GET_TICKETS, SORT_CHEAP, SORT_FAST, ON_ERROR, ON_ALERT } from './types'
 
 const defaultState = {
   ticketsData: [],
@@ -9,7 +9,7 @@ const defaultState = {
   sortCheap: false,
   sortFast: false,
   onError: false,
-  status: false,
+  onAlert: false,
 }
 
 export const ticketsListReducer = (state = defaultState, action) => {
@@ -30,7 +30,6 @@ export const ticketsListReducer = (state = defaultState, action) => {
       } else {
         return {
           ...state,
-          status: !state.status,
         }
       }
 
@@ -39,6 +38,9 @@ export const ticketsListReducer = (state = defaultState, action) => {
 
     case SORT_FAST:
       return { ...state, sortFast: true, sortCheap: false }
+
+    case ON_ALERT:
+      return { ...state, onAlert: true }
 
     default:
       return state

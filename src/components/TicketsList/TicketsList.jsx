@@ -21,18 +21,14 @@ const TicketsList = () => {
   const aviaApi = new AviaApi()
 
   const dispatch = useDispatch()
-  const { ticketsData, stopSearch, sortCheap, sortFast, searchId, status } = useSelector((state) => state.ticketsList)
+  const { ticketsData, stopSearch, sortCheap, sortFast, searchId, onAlert } = useSelector((state) => state.ticketsList)
   const { allCheck, withoutCheck, oneCheck, twoCheck, threeCheck } = useSelector((state) => state.filtersBox)
   const { onLineStatus } = useSelector((state) => state.app)
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    dispatch(aviaApi.getSearchIdThunk())
-  }, [])
-
-  useEffect(() => {
-    dispatch(aviaApi.getTicketsThunk(searchId, stopSearch, onLineStatus))
-  }, [searchId, status])
+    dispatch(aviaApi.getSearchIdThunk(searchId, stopSearch, onLineStatus))
+  }, [searchId])
 
   let partTicketsData = []
   let count = null
@@ -64,6 +60,15 @@ const TicketsList = () => {
   return (
     <div className={classes['tickets-list']}>
       <div className={classes['tickets-sort']}>
+        {onAlert ? (
+          <Alert
+            className={classes.alert}
+            message="Внимание, что-то пошло не так!"
+            description="- перезагрузите страницу."
+            type="error"
+            closable
+          />
+        ) : null}
         <Button.Group>
           <Button
             disabled={!withoutCheck && !oneCheck && !twoCheck && !threeCheck ? true : false}

@@ -8,6 +8,7 @@ import {
   sortCheapAction,
   sortFastAction,
   onErrorAction,
+  onAlertAction,
   onLineStatusAction,
   offLineStatusAction,
 } from './actions'
@@ -22,6 +23,7 @@ export {
   sortCheapAction,
   sortFastAction,
   onErrorAction,
+  onAlertAction,
   onLineStatusAction,
   offLineStatusAction,
 }

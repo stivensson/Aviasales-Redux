@@ -12,6 +12,7 @@ import {
   GET_TICKETS,
   GET_SEARCH_ID,
   ON_ERROR,
+  ON_ALERT,
   SORT_CHEAP,
   SORT_FAST,
   ONLINE,
@@ -44,6 +45,7 @@ export const getTicketsAction = (payload) => ({ type: GET_TICKETS, payload })
 export const onErrorAction = () => ({ type: ON_ERROR })
 export const sortCheapAction = () => ({ type: SORT_CHEAP })
 export const sortFastAction = () => ({ type: SORT_FAST })
+export const onAlertAction = () => ({ type: ON_ALERT })
 
 export const onLineStatusAction = () => ({ type: ONLINE })
 export const offLineStatusAction = () => ({ type: OFFLINE })
