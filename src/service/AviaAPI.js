@@ -3,7 +3,7 @@ import { getSearchIdAction, getTicketsAction, onErrorAction, onAlertAction } fro
 export default class AviaApi {
   url = new URL('https://aviasales-test-api.kata.academy')
 
-  getSearchIdThunk(searchId, stopSearch, onLineStatus) {
+  getSearchIdThunk(searchId, stopSearch) {
     if (!searchId) {
       return async (dispatch) => {
         const newUrl = new URL('/search', this.url)
@@ -29,7 +29,6 @@ export default class AviaApi {
 
       try {
         while (!stopSearch) {
-          if (!onLineStatus) break
           const res = await fetch(newUrl)
           if (res.ok) {
             const body = await res.json()
